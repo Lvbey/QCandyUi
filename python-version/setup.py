@@ -10,8 +10,5 @@ setup(
     url='https://github.com/shuoGG1239/QCandyUi',
     packages=['QCandyUi'],
     include_package_data=True,
-    zip_safe=False,
-    install_requires= [
-        'pywin32'
-    ]
+    zip_safe=False
 )
