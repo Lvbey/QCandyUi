@@ -1,6 +1,3 @@
-import win32gui
-
-import win32con
 from PyQt5.Qt import QSizePolicy
 from PyQt5.QtCore import QEvent, QSize, pyqtSlot
 from PyQt5.QtWidgets import QLabel, QPushButton, QHBoxLayout, QApplication, QWidget
@@ -102,17 +99,24 @@ class Titlebar(QWidget):
         if self.m_pMaximizeButton.isEnabled():
             self.m_pMaximizeButton.clicked.emit()  # 双击全屏
 
-    def mousePressEvent(self, e):
+    def mousePressEvent(self, event):
         """
         使窗口能被拖动
         :param e:
         :return:
         """
-        win32gui.ReleaseCapture()
-        pWindow = self.window()
-        if pWindow.isWindow():
-            win32gui.SendMessage(pWindow.winId(), win32con.WM_SYSCOMMAND, win32con.SC_MOVE + win32con.HTCAPTION, 0)
-        e.ignore()
+        # win32gui.ReleaseCapture()
+        # pWindow = self.window()
+        # if pWindow.isWindow():
+        #     win32gui.SendMessage(pWindow.winId(), win32con.WM_SYSCOMMAND, win32con.SC_MOVE + win32con.HTCAPTION, 0)
+        # e.ignore()
+        if event.button() == Qt.LeftButton:
+                self._startPos = event.globalPos() - self.frameGeometry().topLeft()
+                event.accept()
+    def mouseMoveEvent(self, event):
+        if event.buttons() == Qt.LeftButton and self._startPos:
+            self.move(event.globalPos() - self._startPos)
+            event.accept()
 
     def eventFilter(self, object, e):
         if e.type() == QEvent.WindowTitleChange:
